@@ -26,6 +26,12 @@ public class CityService {
     private static char firstLetterInWord;
 
     public City getRundomCity() {
+        long allUsedCitiesIds = usedCityRepository.count();
+        if (allUsedCitiesIds > 0) {
+            usedCityRepository.clear();
+            lastLetterInGame = 0;
+        }
+
         long allCitiesIds = cityRepository.count();
         Random random = new Random();
         long randomCityId = random.nextLong(1, allCitiesIds);
