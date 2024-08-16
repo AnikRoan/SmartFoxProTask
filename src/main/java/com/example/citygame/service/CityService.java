@@ -42,7 +42,7 @@ public class CityService {
 
         Optional<City> city = findCityProgramResponse(cityName);
         if (city.isEmpty()) {
-            return Optional.ofNullable(City.builder().name("Кінець міста").build());
+            return Optional.ofNullable(City.builder().name("Міста на букву: " + lastLetterInGame + "скінчились. натисніть кнопку Почати гру").build());
         }
 
         addUsedCityToUsedCityDBList(city);
@@ -115,7 +115,7 @@ public class CityService {
     private void isUserCitiRequestIsRealCity(String cityName) {
         Optional<City> city = cityRepository.findByName(cityName);
         if (!addUsedCityToUsedCityDBList(city)) {
-            throw new IllegalArgumentException("немає такого міста в Україні");
+            throw new IllegalArgumentException("немає такого міста в Україні. спробуйте ще або натисніть кнопку Почати гру");
 
         }
         //return addUsedCityToUsedCityDBList(city);
