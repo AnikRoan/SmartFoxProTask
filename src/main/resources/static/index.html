@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра Міста</title>
+    <script>
+        async function startGame() {
+            const response = await fetch('/city/begin');
+            const city = await response.text();
+            document.getElementById('result').textContent = 'Система запропонувала: ' + city;
+        }
+
+        async function nextMove() {
+            const city = document.getElementById('cityInput').value;
+            const response = await fetch(`/city/next/${city}`);
+            const nextCity = await response.text();
+            document.getElementById('result').textContent = 'Система відповіла: ' + nextCity;
+        }
+
+
+        async function endGame() {
+            const response = await fetch('/city/end', {
+                method: 'POST'
+            });
+            const message = await response.text();
+            document.getElementById('result').textContent = message;
+        }
+    </script>
+</head>
+<body>
+<h1>Гра Міста</h1>
+<button onclick="startGame()">Почати гру</button>
+<br><br>
+<label for="cityInput">Ваше місто:</label>
+<input type="text" id="cityInput">
+<button onclick="nextMove()">Відправити</button>
+<br><br>
+<button onclick="endGame()">Закінчити гру</button>
+<br><br>
+<p id="result"></p>
+</body>
+</html>
