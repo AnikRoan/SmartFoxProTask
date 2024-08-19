@@ -33,6 +33,8 @@ public class CityService {
         }
 
         long allCitiesIds = cityRepository.count();
+        //or I can get all ids to list and then get list size and choose random id
+        //because if id in DB will be changed and will be start not from 1 this approach will not work
         Random random = new Random();
         long randomCityId = random.nextLong(1, allCitiesIds);
         City city = cityRepository.findById(randomCityId).orElseThrow(()
@@ -48,7 +50,8 @@ public class CityService {
 
         Optional<City> city = findCityProgramResponse(cityName);
         if (city.isEmpty()) {
-            return Optional.ofNullable(City.builder().name("Міста на букву: " + lastLetterInGame + "скінчились. натисніть кнопку Почати гру").build());
+            return Optional.ofNullable(City.builder()
+                    .name("Міста на букву: " + lastLetterInWord + "скінчились. натисніть кнопку Почати гру").build());
         }
 
         addUsedCityToUsedCityDBList(city);
@@ -121,10 +124,11 @@ public class CityService {
     private void isUserCitiRequestIsRealCity(String cityName) {
         Optional<City> city = cityRepository.findByName(cityName);
         if (!addUsedCityToUsedCityDBList(city)) {
-            throw new IllegalArgumentException("немає такого міста в Україні. спробуйте ще або натисніть кнопку Почати гру");
+            throw new IllegalArgumentException(
+                    "немає такого міста в Україні. спробуйте ще або натисніть кнопку Почати гру");
 
         }
-        //return addUsedCityToUsedCityDBList(city);
+
     }
 
     private boolean addUsedCityToUsedCityDBList(Optional<City> city) {
@@ -140,6 +144,11 @@ public class CityService {
 
     @Transactional
     public String endGame() {
+        long allUsedCitiesIds = usedCityRepository.count();
+        if(allUsedCitiesIds == 0) {
+            return "Натисніть кнопку Почати гру";
+        }
+
         usedCityRepository.clear();
         lastLetterInGame = 0;
 
