@@ -16,8 +16,8 @@ public class CityController {
         return ResponseEntity.ok(cityService.getRundomCity().getName());
     }
 
-    @GetMapping("/next/{word}")
-    public ResponseEntity<String> next(@PathVariable("word") String word) {
+    @GetMapping("/next")
+    public ResponseEntity<String> next(@RequestParam("word") String word) {
         if (word.isEmpty() || word == null) {
             return ResponseEntity.ok("Введіть місто");
         }

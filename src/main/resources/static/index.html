@@ -13,7 +13,7 @@
 
         async function nextMove() {
             const city = document.getElementById('cityInput').value;
-            const response = await fetch(`/city/next/${city}`);
+            const response = await fetch(`/city/next?word=${encodeURIComponent(city)}`);
             const nextCity = await response.text();
             document.getElementById('result').textContent = 'Система відповіла: ' + nextCity;
         }
